@@ -72,7 +72,7 @@ server = ws.createServer((conn) ->
     ###
     constructor: (@mac, @frequency, @freq_ph_usage, @stay_time, @pop_limit)->
       t_int = (1440-@frequency*@stay_time)/@frequency
-      @interval = Math.floor((Math.random() * t_int*0.65) + t_int*0.35)
+      @interval = Math.floor((Math.random() * t_int*0.9) + t_int*0.8)
       @last=-1
       console.log @
 
@@ -82,7 +82,7 @@ server = ws.createServer((conn) ->
         present = (user for user in ulist when user.state is 'present').length
         if(present<@pop_limit)
           @state='present'
-          ph_int = Math.floor((Math.random() * @stay_time/@freq_ph_usage*0.8)+@stay_time/@freq_ph_usage*0.65)
+          ph_int = Math.floor((Math.random() * @stay_time/@freq_ph_usage*0.9)+@stay_time/@freq_ph_usage*0.8)
           for n in [1..@stay_time]
             if n%ph_int is 0
               @use_phone(i,n,ulist)
