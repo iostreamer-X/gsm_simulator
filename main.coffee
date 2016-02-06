@@ -83,6 +83,7 @@ class Person
         for n in [1..@stay_time]
           if n%ph_int is 0
             @use_phone(i,n,ulist)
+        @state='absent'
 
   use_phone:(i,n,ulist)->
     cells = [3012,5611,9876]
@@ -171,3 +172,4 @@ while true
       user.try_visit(i,users)
   for user in users
     user.last=-1
+    user.state='absent'
