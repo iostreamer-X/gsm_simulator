@@ -164,7 +164,9 @@ deepCopy = (obj) ->
   obj
 
 while true
-  ulist=deepCopy(users)
+  #ulist=deepCopy(users)
   for i in [1..24*60]
-    for user in ulist
-      user.try_visit(i,ulist)
+    for user in users
+      user.try_visit(i,users)
+  for user in users
+    user.last=-1
