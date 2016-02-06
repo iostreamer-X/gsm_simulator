@@ -5,6 +5,7 @@ visit these places out of habit and use their phones according to the behavior
 prescribed.
 
 The app takes argument such as:
+
 1. population: Number of people
 
 2. high,medium,low for frequency of visits: These number are percentages. Each percentage
