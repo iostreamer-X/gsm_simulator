@@ -6,17 +6,19 @@ prescribed.
 
 The app takes argument such as:
 
-1. population: Number of people
+1. **population**: Number of people
 
-2. high,medium,low for frequency of visits: These number are percentages. Each percentage
+2. **high,medium,low for frequency of visits**: These number are percentages. Each percentage
 controls the fraction of population which will have a set behavior. For example, 32,23,45 means
 that, 32% will visit the place very frequently per day, 23% will visit moderately and 45% won't visit much per day.
 
-3. high,medium,low for frequency of phone usage
+3. **high,medium,low for frequency of phone usage**: frequency of phone usage means the number of times the
+user will use her/his phone per visit to the place.
 
-4. high,medium,low for stay time
+4. **high,medium,low for stay time**: stay time is time in minutes the user spends at the place per visit.
 
-5. high,medium,low for crowd tolerance limit
+5. **high,medium,low for crowd tolerance limit**: If the crowd at the place is higher than this limit then the user won't
+visit the place.
 
 ##Install
 
