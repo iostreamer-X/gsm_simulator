@@ -33,8 +33,6 @@ The arguments have already been explained.
 
 ##Output
 
-The output is gsm packets. You can receive them using socket.io client.
-The channel is 'futurelabs'.
-So, something like
-`socket.on('futurelabs', (data)-> console.log data)`
-would give you the generated gsm packets.
+The output is gsm packets. You can receive them using websocket client.
+Install `sudo pip install websocket-client`.
+Run `python client.py` to test.
