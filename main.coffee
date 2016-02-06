@@ -22,7 +22,7 @@ hml_freq[1]+=population- hml_freq.reduce (a,b)->a+b
 
 
 class Packet
-  constructor: (@smac, @dmac, @ip, @port, @tower)->
+  constructor: (@smac, @dmac, @ip, @port, @tower, @time)->
 
   @towers:[
     {
@@ -90,7 +90,7 @@ class Person
     list = (user for user in users when user.mac!=@mac)
     random_user = list[Math.floor((Math.random() * list.length))]
     tower = Packet.towers[ulist.indexOf(@)%4]
-    packet = new Packet @mac, random_user.mac, @mac,9000,tower
+    packet = new Packet @mac, random_user.mac, @mac,9000,tower,i
     io.emit('futurelabs',packet)
     console.log packet
 
