@@ -152,12 +152,12 @@ server = ws.createServer((conn) ->
 
     users.push new Person(mac,frequency,freq_ph_usage,stay_time,pop_limit)
 
-    setInterval ->
-      for i in [1..24*60]
-        for user in users
-          user.try_visit(i,users)
-        for user in users
-          user.last=-1
-          user.state='absent'
-    ,100
+  setInterval ->
+    for i in [1..24*60]
+      for user in users
+        user.try_visit(i,users)
+    for user in users
+      user.last=-1
+      user.state='absent'
+  ,100
 ).listen(6001)
