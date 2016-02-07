@@ -1,5 +1,5 @@
 ws = require 'nodejs-websocket'
-
+#heapdump = require 'heapdump'
 population = process.argv[2]
 freq_per = process.argv[3]
 freq_ph_usage_per = process.argv[4]
@@ -8,8 +8,12 @@ pop_limit_per = process.argv[6]
 
 if !population or !freq_per or !freq_ph_usage_per or !stay_time_per or !pop_limit_per
   console.log "Argument/s undefined."
-  console.log "Example usage: node index.js 12 32,23,45 22,33,45 12,13,75 32,23,45"
+  console.log "Example usage: node --expose-gc index.js 12 32,23,45 22,33,45 12,13,75 32,23,45"
   process.exit -1
+
+process.on 'SIGUSR2', ()->
+  console.log 'gc'
+  gc()
 
 server = ws.createServer((conn) ->
   console.log 'New connection'
@@ -95,6 +99,7 @@ server = ws.createServer((conn) ->
       tower = Packet.towers[ulist.indexOf(@)%4]
       packet = new Packet @mac, random_user.mac, @mac,9000,tower,i
       conn.sendText JSON.stringify packet
+      gc()
       #console.log packet
 
   users=[]
@@ -147,33 +152,12 @@ server = ws.createServer((conn) ->
 
     users.push new Person(mac,frequency,freq_ph_usage,stay_time,pop_limit)
 
-
-  deepCopy = (obj) ->
-    `var i`
-    `var out`
-    if Object::toString.call(obj) == '[object Array]'
-      out = []
-      i = 0
-      len = obj.length
-      while i < len
-        out[i] = arguments.callee(obj[i])
-        i++
-      return out
-    if typeof obj == 'object'
-      out = {}
-      i = undefined
-      for i of obj
-        `i = i`
-        out[i] = arguments.callee(obj[i])
-      return out
-    obj
-
-  while true
-    #ulist=deepCopy(users)
-    for i in [1..24*60]
-      for user in users
-        user.try_visit(i,users)
-    for user in users
-      user.last=-1
-      user.state='absent'
+    setInterval ->
+      for i in [1..24*60]
+        for user in users
+          user.try_visit(i,users)
+        for user in users
+          user.last=-1
+          user.state='absent'
+    ,100
 ).listen(6001)

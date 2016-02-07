@@ -27,7 +27,7 @@ visit the place.
 
 ##Usage
 
-`node index.js 2 13,23,45 22,33,12 12,13,11 13,23,45`
+`node --expose-gc index.js 2 13,23,45 22,33,12 12,13,11 13,23,45`
 
 The arguments have already been explained.
 
