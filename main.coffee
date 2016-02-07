@@ -97,7 +97,7 @@ server = ws.createServer((conn) ->
       list = (user for user in users when user.mac!=@mac)
       random_user = list[Math.floor((Math.random() * list.length))]
       tower = Packet.towers[ulist.indexOf(@)%4]
-      packet = new Packet @mac, random_user.mac, @mac,9000,tower,i
+      packet = new Packet @mac, random_user.mac, @mac,9000,tower,i+n
       conn.sendText JSON.stringify packet
       gc()
       #console.log packet
