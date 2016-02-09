@@ -94,10 +94,12 @@ server = ws.createServer((conn) ->
         present = (user for user in ulist when user.state is 'present').length
         if(present<@pop_limit)
           @state='present'
-          for n in [1..@randomized_stay_time]
-            if n%@randomized_ph_int is 0
-              @use_phone(i,n,ulist)
-          @state='absent'
+          setTimeout (user)->
+            for n in [1..user.randomized_stay_time]
+              if n%user.randomized_ph_int is 0
+                user.use_phone(i,n,ulist)
+            @state='absent'
+          ,30,@
 
     use_phone:(i,n,ulist)->
       list = (user for user in users when user.mac!=@mac)
