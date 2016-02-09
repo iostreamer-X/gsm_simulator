@@ -82,7 +82,7 @@ server = ws.createServer((conn) ->
       t_int = (1440-@frequency*@stay_time)/@frequency
       @interval = t_int
       @randomized_interval = Math.round(Math.random() * 0.3*@interval + 0.7*@interval)
-      @ph_int = @stay_time/@freq_ph_usage
+      @ph_int = Math.floor  @stay_time/@freq_ph_usage
       @randomized_ph_int = Math.round(Math.random() * 0.5*@ph_int + 0.5*@ph_int)
       @randomized_stay_time = Math.round(Math.random() * 0.6*@stay_time + 0.4*@stay_time)
       @last=-1
@@ -117,43 +117,43 @@ server = ws.createServer((conn) ->
     pop_limit=0
 
     if hml_freq[0]
-      frequency=Math.floor((Math.random()) + 4)
+      frequency=Math.round((Math.random()) + 4)
       hml_freq[0]--
     else if hml_freq[1]
-      frequency=Math.floor((Math.random()) + 2)
+      frequency=Math.round((Math.random()) + 2)
       hml_freq[1]--
     else if hml_freq[2]
-      frequency=Math.floor((Math.random()) + 1)
+      frequency=Math.round((Math.random()) + 1)
       hml_freq[2]--
 
     if hml_freq_ph_usage[0]
-      freq_ph_usage=Math.floor((Math.random() * 2) + 8)
+      freq_ph_usage=Math.round((Math.random() * 2) + 8)
       hml_freq_ph_usage[0]--
     else if hml_freq_ph_usage[1]
-      freq_ph_usage=Math.floor((Math.random() * 4) + 3)
+      freq_ph_usage=Math.round((Math.random() * 4) + 3)
       hml_freq_ph_usage[1]--
     else if hml_freq_ph_usage[2]
-      freq_ph_usage=Math.floor((Math.random()) + 1)
+      freq_ph_usage=Math.round((Math.random()) + 1)
       hml_freq_ph_usage[2]--
 
     if hml_stay_time[0]
-      stay_time=Math.floor((Math.random() * 15) + 45)
+      stay_time=Math.round((Math.random() * 15) + 45)
       hml_stay_time[0]--
     else if hml_stay_time[1]
-      stay_time=Math.floor((Math.random() * 15) + 25)
+      stay_time=Math.round((Math.random() * 15) + 25)
       hml_stay_time[1]--
     else if hml_stay_time[2]
-      stay_time=Math.floor((Math.random() * 15) + 5)
+      stay_time=Math.round((Math.random() * 15) + 5)
       hml_stay_time[2]--
 
     if hml_pop_limit[0]
-      pop_limit=Math.floor((Math.random() * 5) + 15)
+      pop_limit=Math.round((Math.random() * 5) + 15)
       hml_pop_limit[0]--
     else if hml_pop_limit[1]
-      pop_limit=Math.floor((Math.random() * 7) + 7)
+      pop_limit=Math.round((Math.random() * 7) + 7)
       hml_pop_limit[1]--
     else if hml_pop_limit[2]
-      pop_limit=Math.floor((Math.random() * 4) + 2)
+      pop_limit=Math.round((Math.random() * 4) + 2)
       hml_pop_limit[2]--
 
     users.push new Person(mac,frequency,freq_ph_usage,stay_time,pop_limit)
