@@ -66,10 +66,10 @@ server = ws.createServer((conn) ->
     state:'absent'
     last:0
     interval:0
+    ph_int:0
     randomized_interval:0
     randomized_ph_int:0
     randomized_stay_time:0
-    ph_int:0
     ###
       mac= mac address of the phone of the user
       frequency= times per day the user visits
@@ -81,8 +81,8 @@ server = ws.createServer((conn) ->
     constructor: (@mac, @frequency, @freq_ph_usage, @stay_time, @pop_limit)->
       t_int = (1440-@frequency*@stay_time)/@frequency
       @interval = t_int
-      @randomized_interval = Math.round(Math.random() * 0.3*@interval + 0.7*@interval)
       @ph_int = Math.floor  @stay_time/@freq_ph_usage
+      @randomized_interval = Math.round(Math.random() * 0.3*@interval + 0.7*@interval)
       @randomized_ph_int = Math.round(Math.random() * 0.5*@ph_int + 0.5*@ph_int)
       @randomized_stay_time = Math.round(Math.random() * 0.6*@stay_time + 0.4*@stay_time)
       @last=-1
