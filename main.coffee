@@ -163,11 +163,11 @@ server = ws.createServer((conn) ->
       for user in users
         user.try_visit(i,users)
         user.randomized_interval = Math.round(Math.random() * 0.1*user.interval + 0.9*user.interval)
+        user.randomized_ph_int = Math.round(Math.random() * 0.2*user.ph_int + 0.8*user.ph_int)
+        user.randomized_stay_time = Math.round(Math.random() * 0.4*user.stay_time + 0.6*user.stay_time)
     for user in users
       user.last=-1
       user.state='absent'
-      user.randomized_ph_int = Math.round(Math.random() * 0.5*user.ph_int + 0.5*user.ph_int)
-      user.randomized_stay_time = Math.round(Math.random() * 0.6*user.stay_time + 0.4*user.stay_time)
 
   ,100
 ).listen(6001)
