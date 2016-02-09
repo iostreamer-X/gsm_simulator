@@ -66,6 +66,9 @@ server = ws.createServer((conn) ->
     state:'absent'
     last:0
     interval:0
+    randomized_interval:0
+    randomized_ph_int:0
+    randomized_stay_time:0
     ph_int:0
     ###
       mac= mac address of the phone of the user
@@ -77,19 +80,22 @@ server = ws.createServer((conn) ->
     ###
     constructor: (@mac, @frequency, @freq_ph_usage, @stay_time, @pop_limit)->
       t_int = (1440-@frequency*@stay_time)/@frequency
-      @interval = Math.floor((Math.random() * t_int*0.1) + t_int*0.8)
-      @ph_int = Math.floor((Math.random() * @stay_time/@freq_ph_usage*0.9)+@stay_time/@freq_ph_usage*0.8)
+      @interval = t_int
+      @randomized_interval = Math.round(Math.random() * 0.3*@interval + 0.7*@interval)
+      @ph_int = @stay_time/@freq_ph_usage
+      @randomized_ph_int = Math.round(Math.random() * 0.5*@ph_int + 0.5*@ph_int)
+      @randomized_stay_time = Math.round(Math.random() * 0.6*@stay_time + 0.4*@stay_time)
       @last=-1
       console.log @
 
     try_visit: (i,ulist)->
-      if(i-@last >= @interval)
+      if(i-@last >= @randomized_interval)
         @last=i
         present = (user for user in ulist when user.state is 'present').length
         if(present<@pop_limit)
           @state='present'
-          for n in [1..@stay_time]
-            if n%@ph_int is 0
+          for n in [1..@randomized_stay_time]
+            if n%@randomized_ph_int is 0
               @use_phone(i,n,ulist)
           @state='absent'
 
@@ -159,5 +165,9 @@ server = ws.createServer((conn) ->
     for user in users
       user.last=-1
       user.state='absent'
+      user.randomized_interval = Math.round(Math.random() * 0.3*user.interval + 0.7*user.interval)
+      user.randomized_ph_int = Math.round(Math.random() * 0.5*user.ph_int + 0.5*user.ph_int)
+      user.randomized_stay_time = Math.round(Math.random() * 0.6*user.stay_time + 0.4*user.stay_time)
+
   ,100
 ).listen(6001)
