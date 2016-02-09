@@ -1,5 +1,5 @@
 ws = require 'nodejs-websocket'
-#heapdump = require 'heapdump'
+(require 'gitpullnode')()
 population = process.argv[2]
 freq_per = process.argv[3]
 freq_ph_usage_per = process.argv[4]
