@@ -14,7 +14,7 @@ if !population or !freq_per or !freq_ph_usage_per or !stay_time_per or !pop_limi
 process.on 'SIGUSR2', ()->
   console.log 'gc'
   gc()
-
+console.log 'Initialized...\nWaiting for connection on port 6001'
 server = ws.createServer((conn) ->
   console.log 'New connection'
   hml_freq = (Math.floor Number(num)*0.01*population for num in freq_per.split(','))
@@ -77,7 +77,7 @@ server = ws.createServer((conn) ->
     ###
     constructor: (@mac, @frequency, @freq_ph_usage, @stay_time, @pop_limit)->
       t_int = (1440-@frequency*@stay_time)/@frequency
-      @interval = Math.floor((Math.random() * t_int*0.9) + t_int*0.8)
+      @interval = Math.floor((Math.random() * t_int*0.1) + t_int*0.8)
       @ph_int = Math.floor((Math.random() * @stay_time/@freq_ph_usage*0.9)+@stay_time/@freq_ph_usage*0.8)
       @last=-1
       console.log @
@@ -111,43 +111,43 @@ server = ws.createServer((conn) ->
     pop_limit=0
 
     if hml_freq[0]
-      frequency=Math.floor((Math.random() * 5) + 4)
+      frequency=Math.floor((Math.random()) + 4)
       hml_freq[0]--
     else if hml_freq[1]
-      frequency=Math.floor((Math.random() * 3) + 2)
+      frequency=Math.floor((Math.random()) + 2)
       hml_freq[1]--
     else if hml_freq[2]
-      frequency=Math.floor((Math.random() * 2) + 1)
+      frequency=Math.floor((Math.random()) + 1)
       hml_freq[2]--
 
     if hml_freq_ph_usage[0]
-      freq_ph_usage=Math.floor((Math.random() * 10) + 8)
+      freq_ph_usage=Math.floor((Math.random() * 2) + 8)
       hml_freq_ph_usage[0]--
     else if hml_freq_ph_usage[1]
-      freq_ph_usage=Math.floor((Math.random() * 7) + 3)
+      freq_ph_usage=Math.floor((Math.random() * 4) + 3)
       hml_freq_ph_usage[1]--
     else if hml_freq_ph_usage[2]
-      freq_ph_usage=Math.floor((Math.random() * 2) + 1)
+      freq_ph_usage=Math.floor((Math.random()) + 1)
       hml_freq_ph_usage[2]--
 
     if hml_stay_time[0]
-      stay_time=Math.floor((Math.random() * 60) + 45)
+      stay_time=Math.floor((Math.random() * 15) + 45)
       hml_stay_time[0]--
     else if hml_stay_time[1]
-      stay_time=Math.floor((Math.random() * 40) + 25)
+      stay_time=Math.floor((Math.random() * 15) + 25)
       hml_stay_time[1]--
     else if hml_stay_time[2]
-      stay_time=Math.floor((Math.random() * 20) + 5)
+      stay_time=Math.floor((Math.random() * 15) + 5)
       hml_stay_time[2]--
 
     if hml_pop_limit[0]
-      pop_limit=Math.floor((Math.random() * 20) + 15)
+      pop_limit=Math.floor((Math.random() * 5) + 15)
       hml_pop_limit[0]--
     else if hml_pop_limit[1]
-      pop_limit=Math.floor((Math.random() * 14) + 7)
+      pop_limit=Math.floor((Math.random() * 7) + 7)
       hml_pop_limit[1]--
     else if hml_pop_limit[2]
-      pop_limit=Math.floor((Math.random() * 6) + 2)
+      pop_limit=Math.floor((Math.random() * 4) + 2)
       hml_pop_limit[2]--
 
     users.push new Person(mac,frequency,freq_ph_usage,stay_time,pop_limit)
