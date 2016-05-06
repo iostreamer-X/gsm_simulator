@@ -15,8 +15,10 @@ server=ws.createServer((conn)->
       if 8*60 < i < 19*60
         if @work_call isnt 0 and i%70 is 0
           @work_call--
-          wr=JSON.stringify {id:@id, time:i, tower:home_to_work[person_to_home[@id].id]}
-          conn.sendText wr
+          try
+            wr=JSON.stringify {id:@id, time:i, tower:home_to_work[person_to_home[@id].id]}
+            conn.sendText wr
+          catch error
           #fs.appendFile "packets.txt",wr+"\n",(err)->
           #console.log {id:@id, time:i, tower:home_to_work[person_to_home[@id].id]}
       if 20*60 < i < 1440
