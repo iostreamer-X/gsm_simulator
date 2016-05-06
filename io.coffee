@@ -1,4 +1,5 @@
 console.log 'Loading data...'
+fs = require 'fs'
 cell_towers = require './cell_towers.json'
 console.log 'Complete'
 
@@ -11,15 +12,19 @@ class Person
     if 8*60 < i < 19*60
       if @work_call isnt 0 and i%70 is 0
         @work_call--
-        console.log home_to_work[person_to_home[@id].id]
+        wr=JSON.stringify {id:@id, time:i, tower:home_to_work[person_to_home[@id].id]}
+        fs.appendFile "packets.txt",wr+"\n",(err)->
+        #console.log {id:@id, time:i, tower:home_to_work[person_to_home[@id].id]}
     if 20*60 < i < 1440
       if @home_call isnt 0 and i%35 is 0
         @home_call--
-        console.log person_to_home[@id]
-mapper = (domain,range)->
+        wr=JSON.stringify {id:@id, time:i, tower:person_to_home[@id]}
+        fs.appendFile "packets.txt",wr+"\n",(err)->
+        #console.log {id:@id, time:i, tower:person_to_home[@id]}
+m = (domain,range)->
   fn={}
-  for i in [0..domain.length-1]
-    fn[domain[i].id]=range[Math.round Math.random()*range.length]
+  for elem in domain
+    fn[elem.id]=range[Math.round Math.random()*range.length]
   fn
 
 jsonconcat = (o1, o2) ->
@@ -31,13 +36,13 @@ getRandomInt = (min, max) ->
   Math.floor(Math.random() * (max - min + 1)) + min
 
 
-Object.prototype.concat = (arg)->
+Object::c = (arg)->
   jsonconcat(@,arg)
 
-zone_tower = (zone)->
+z_t = (zone)->
   (tower for tower in cell_towers when tower.zone is zone)
 
-zone_person = (zone)->
+z_p = (zone)->
   (person for person in people when person.zone is zone)
 
 
@@ -64,14 +69,25 @@ args = process.argv.slice 2
 population = Number args[0]
 people=[]
 
-nw = getRandomInt(35,40)*0.01*Math.floor 21.79*0.01*population
-ne = getRandomInt(35,40)*0.01*Math.floor 13.38*0.01*population
-w = getRandomInt(35,40)*0.01*Math.floor 15.2*0.01*population
-c = getRandomInt(35,40)*0.01* Math.floor 3.45*0.01*population
-e = getRandomInt(35,40)*0.01*Math.floor 10.19*0.01*population
-sw = getRandomInt(35,40)*0.01*Math.floor 13.68*0.01*population
-s = getRandomInt(35,40)*0.01*Math.floor 16.32*0.01*population
-n = getRandomInt(35,40)*0.01* Math.floor 5.27*0.01*population
+nw = Math.round getRandomInt(35,40)*0.01*Math.floor 21.79*0.01*population
+ne = Math.round getRandomInt(10,25)*0.01*Math.floor 13.38*0.01*population
+w = Math.round getRandomInt(10,25)*0.01*Math.floor 15.2*0.01*population
+c = Math.round getRandomInt(35,40)*0.01* Math.floor 3.45*0.01*population
+e = Math.round getRandomInt(35,40)*0.01*Math.floor 10.19*0.01*population
+sw = Math.round getRandomInt(35,40)*0.01*Math.floor 13.68*0.01*population
+s = Math.round getRandomInt(35,40)*0.01*Math.floor 16.32*0.01*population
+n = Math.round getRandomInt(35,40)*0.01* Math.floor 5.27*0.01*population
+
+console.log 'Simulation variables:'
+console.log "Population: #{people.length}"
+console.log "Population in nw: #{Math.floor 21.79*0.01*population}. Working population: "+nw
+console.log "Population in ne: #{Math.floor 13.38*0.01*population}. Working population: "+ne
+console.log "Population in w: #{Math.floor 15.2*0.01*population}. Working population: "+w
+console.log "Population in c: #{Math.floor 3.45*0.01*population}. Working population: "+c
+console.log "Population in e: #{Math.floor 10.19*0.01*population}. Working population: "+e
+console.log "Population in sw: #{Math.floor 13.68*0.01*population}. Working population: "+sw
+console.log "Population in s: #{Math.floor 16.32*0.01*population}. Working population: "+s
+console.log "Population in n: #{Math.floor 5.27*0.01*population}. Working population: "+n
 
 for num in [0..population-1]
   if nw
@@ -80,65 +96,61 @@ for num in [0..population-1]
     person.home_call=getRandomInt 1,4
     people.unshift(person)
     nw--
-  if ne
+  else if ne
     person=new Person(num,'ne')
     person.work_call=getRandomInt 1,8
     person.home_call=getRandomInt 1,4
     people.unshift(person)
     ne--
-  if n
+  else if n
     person=new Person(num,'n')
     person.work_call=getRandomInt 1,8
     person.home_call=getRandomInt 1,4
     people.unshift(person)
     n--
-  if sw
+  else if sw
     person=new Person(num,'sw')
     person.work_call=getRandomInt 1,8
     person.home_call=getRandomInt 1,4
     people.unshift(person)
     sw--
-  if s
+  else if s
     person=new Person(num,'s')
     person.work_call=getRandomInt 1,8
     person.home_call=getRandomInt 1,4
     people.unshift(person)
     s--
-  if c
+  else if c
     person=new Person(num,'c')
     person.work_call=getRandomInt 1,8
     person.home_call=getRandomInt 1,4
     people.unshift(person)
     c--
-  if w
+  else if w
     person=new Person(num,'w')
     person.work_call=getRandomInt 1,8
     person.home_call=getRandomInt 1,4
     people.unshift(person)
     w--
-  if e
+  else if e
     person=new Person(num,'e')
     person.work_call=getRandomInt 1,8
     person.home_call=getRandomInt 1,4
     people.unshift(person)
     e--
 
-home_to_work = mapper(zone_tower('nw'),zone_tower('sw')).concat mapper(zone_tower('sw'),zone_tower('nw')).concat
-mapper(zone_tower('e'),zone_tower('sw')).concat mapper(zone_tower('s'),zone_tower('c')).concat
-mapper(zone_tower('n'),zone_tower('sw')).concat mapper(zone_tower('c'),zone_tower('sw')).concat
-mapper(zone_tower('sw'),zone_tower('c')).concat mapper(zone_tower('e'),zone_tower('c'))
+home_to_work = m(z_t('nw'),z_t('sw')).c m(z_t('sw'),z_t('nw')).c m(z_t('e'),z_t('sw')).c m(z_t('s'),z_t('c')).c m(z_t('n'),z_t('sw')).c m(z_t('c'),z_t('sw')).c m(z_t('sw'),z_t('c')).c m(z_t('e'),z_t('c')).c m(z_t('ne'),z_t('n')).c m(z_t('w'),z_t('sw'))
+person_to_home = m(z_p('nw'),z_t('nw')).c m(z_p('sw'),z_t('sw')).c m(z_p('e'),z_t('e')).c m(z_p('s'),z_t('s')).c m(z_p('n'),z_t('n')).c m(z_p('c'),z_t('c')).c m(z_p('w'),z_t('w')).c m(z_p('ne'),z_t('ne'))
 
-person_to_home = mapper(zone_person('nw'),zone_tower('nw')).concat mapper(zone_person('sw'),zone_tower('sw')).concat
-mapper(zone_person('e'),zone_tower('e')).concat mapper(zone_person('s'),zone_tower('s')).concat
-mapper(zone_person('n'),zone_tower('n')).concat mapper(zone_person('c'),zone_tower('c')).concat
-mapper(zone_person('w'),zone_tower('w')).concat mapper(zone_person('ne'),zone_tower('n'))
-
-setInterval ->
-  for i in [1..24*60]
+child_process = require 'child_process'
+child_process.exec "rm packets.txt",(e,o,se)->
+  console.log 'Writing packets to packets.txt...'
+  setInterval ->
+    for i in [1..24*60]
+      for person in people
+        person.try_call i
     for person in people
-      person.try_call i
-  for person in people
-    person.work_call=getRandomInt 1,8
-    person.home_call=getRandomInt 1,4
+      person.work_call=getRandomInt 3,8
+      person.home_call=getRandomInt 1,4
 
-,100
+  ,100

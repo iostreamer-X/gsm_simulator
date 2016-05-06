@@ -17,6 +17,7 @@
   "dependencies": {
     "coffee-script": "^1.10.0",
     "gitpullnode": "^1.0.3",
+    "jsonfile": "^2.3.0",
     "nodejs-websocket": "^1.5.0",
     "webworker-threads": "^0.6.2"
   }
